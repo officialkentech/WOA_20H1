@@ -1,20 +1,10 @@
-# WAQ - Windows 10 for ARM on QEMU
-
-## Update
-For anyone who wants newer Windows version, please refer to [this](https://gist.github.com/Vogtinator/293c4f90c5e92838f7e72610725905fd) tutorial by [Vogtinator](https://gist.github.com/Vogtinator)
-
-## Quick note
-It has been a long time since the last time I touched this Readme file. Now's 2022 already and you can build yourself a newer EDKII image instead of using this (if you have problem with using this). And also, if you really want a usable Windows on ARM (not too slow), get a Raspberry Pi and install directly on it (check out WoA project) or run on KVM on it.
+# WOA_20H1 - Windows 10 for ARM Version 20H1 on QEMU
 
 ## Why do this?
 To run Windows on ARM on an emulator without finding a real hardware :)
 
 <br> There are some pages show how to do this on the Internet. But the problem is, you will have to download the iso and install yourself
-and this takes <b>really long time</b> to install on QEMU (about 3 -> 4 days on my machine with <i>Pentium Dualcore T4300</i>). Another way
-is to apply the install.wim to a vhd file and put it to QEMU, but this might not work due to missing EFI loader (I have tried this too).
-
-<br>So in this repo I will give you my modified version of preinstalled img file originally from <a href="https://discourse.pi64.win/t/how-to-installing-windows-10-arm64-17134-on-your-raspberry-pi-3-and-4/488/4">this post</a>
-and the download link is <a href="https://mega.nz/#F!kJI3HIAS!CQAUKgp6thSAA_A2GbgdjA">here</a>.
+and this takes <b>long time</b> to install on QEMU.
 
 ## What have been modified?
 - Disable Pagefile
@@ -23,10 +13,7 @@ and the download link is <a href="https://mega.nz/#F!kJI3HIAS!CQAUKgp6thSAA_A2Gb
 - Fixed EFI
 
 ## Download link
-- <a href="https://drive.google.com/file/d/1AkEPWPXm_N3jzcDk58p2uJbi7HENA2sq/view?usp=sharing">FreeArc compressed version</a>. You must use FreeArc to extract it. (Size: 4.0 GB)
-- <a href="https://drive.google.com/file/d/1XmCJDlcITesHN5oW01ySUU1eyLF_fUE-/view?usp=sharing">7z compressed version</a> (Size: 4.2GB)
-
-If there is a password prompt, type in `win10arm64`
+- <a href="https://www.mediafire.com/file/9oja45cjad3ogo8/WOA_20H1.7z/file">7z compressed version</a> (Size: 2.5GB)
 
 ## How to use
 Step 1: Install QEMU: Goto <a href="https:\\qemu.org">qemu.org</a> and install QEMU if you haven't installed it yet. On Linux just run ```sudo apt install qemu-system-aarch64```
@@ -35,24 +22,24 @@ Step 2: Download the script: Goto <a href="https://github.com/raspiduino/waq/rel
 - For Windows:
 ```bat
 @echo off
-title WOA
-qemu-system-aarch64.exe ^
--name "Windows 10 on ARM64" ^
+title WOA - 20H1
+qemu-system-aarch64 ^
+-name "Windows 10 20H1 on ARM64" ^
 -M virt ^
--cpu cortex-a72 ^
--smp 3 ^
+-cpu cortex-a76 ^
+-smp 4 ^
 --accel tcg,thread=multi ^
--m 2048 ^
+-m 4096 ^
 -pflash QEMU_EFI.img ^
 -pflash QEMU_VARS.img ^
 -device VGA ^
 -device nec-usb-xhci ^
 -device usb-kbd ^
--device usb-mouse ^
+-device usb-tablet ^
 -device usb-storage,drive=boot ^
--drive if=none,id=boot,file="woa_17134.img" ^
+-drive if=none,id=boot,file="WOA_20H1.vhdx" ^
 -device usb-storage,drive=drivercdrom ^
--drive file="virtio-win-0.1.185.iso",media=cdrom,if=none,id=drivercdrom
+-drive file="virtio-win-0.1.248.iso",media=cdrom,if=none,id=drivercdrom
 ```
 - For Linux/MacOS:
 ```bash
